@@ -81,8 +81,8 @@ module-name/
 
 ### Step 1: Clone Template
 ```bash
-gh repo create CR-AudioViz-AI/crav-[module-name] --template CR-AudioViz-AI/module-template --private
-cd crav-[module-name]
+gh repo create CR-AudioViz-AI/javari-[module-name] --template CR-AudioViz-AI/module-template --private
+cd javari-[module-name]
 ```
 
 ### Step 2: Configure Module
@@ -121,7 +121,7 @@ CREATE INDEX idx_[module]_items_status ON public.[module]_items(status);
 
 ### Step 4: Deploy to Vercel
 ```bash
-vercel link --project=crav-[module-name]
+vercel link --project=javari-[module-name]
 vercel env pull
 vercel deploy --prod
 ```
