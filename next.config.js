@@ -1,31 +1,23 @@
-/** @type {import("next").NextConfig} */
-const nextConfig = {
-  typescript: {
-    ignoreBuildErrors: true, // Temporary for rapid deployment
-  },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  images: {
-    remotePatterns: [
-      { protocol: "https", hostname: "**" },
-    ],
-  },
+/**
+ * next.config.js
+ *
+ * 2026-08-31: spreads the SDK base rather than restating it.
+ *
+ * Upgrading 54 repos from Next 14 to 15 meant 54 separate edits to 54 copies of the
+ * same configuration. With a shared base it is one SDK release and a dependency
+ * bump.
+ *
+ * WHAT IS DELIBERATELY ABSENT: typescript.ignoreBuildErrors and
+ * eslint.ignoreDuringBuilds. Seventeen of forty repos shipped with both disabled,
+ * hiding 204 real errors — six files that could not parse at all, a service-role key
+ * travelling in a URL query string, and a consent audit trail that had never written
+ * a row. A template that turns checking off would industrialise exactly that.
+ */
+
+const base = require('@craudioviz/platform-sdk/config/next.config.base.js');
+
+/** @type {import('next').NextConfig} */
+module.exports = {
+  ...base,
+  // Add only what is genuinely specific to this app.
 };
-
-
-// 2026-08-30: Next 15 compiles instrumentation.ts for the EDGE runtime as well
-// as node, so the vault env-shim's `crypto` import is pulled into an edge
-// bundle even though register() returns early off nodejs. Marking it
-// unavailable for the edge compilation is what stops it. The import must stay
-// a BARE `crypto` specifier: webpack rejects the `node:` scheme before
-// resolve.fallback is ever consulted, so `node:crypto` fails here too.
-const _edgeCryptoOff = (config, { nextRuntime }) => {
-  if (nextRuntime === "edge") {
-    config.resolve = config.resolve || {};
-    config.resolve.fallback = { ...(config.resolve.fallback || {}), crypto: false };
-  }
-  return config;
-};
-
-module.exports = { ...nextConfig, webpack: _edgeCryptoOff };
