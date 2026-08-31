@@ -1,18 +1,20 @@
 {
+  "$comment": [
+    "2026-08-31: EXTENDS the SDK base rather than declaring its own compilerOptions.",
+    "",
+    "FIVE DIFFERENT TypeScript targets existed across fourteen satellites — es5,",
+    "ES2017, ES2020, ES2022, and one repo with no target at all. Nobody CHOSE es5; it",
+    "was inherited from whatever template that repo started from, and it cost",
+    "javari-games 22 type errors because its engines iterate Maps and Map iteration",
+    "needs ES2015 or higher.",
+    "",
+    "This file is that template. Extending the base is what stops the next fourteen.",
+    "",
+    "Only paths and include are declared locally, because those are genuinely",
+    "per-app."
+  ],
+  "extends": "./node_modules/@craudioviz/platform-sdk/config/tsconfig.base.json",
   "compilerOptions": {
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "noEmit": true,
-    "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "bundler",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "preserve",
-    "incremental": true,
-    "plugins": [{ "name": "next" }],
     "paths": { "@/*": ["./*"] }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
